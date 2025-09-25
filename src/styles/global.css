@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   color-scheme: light;
@@ -9,6 +9,8 @@
   --surface-app: #f7f9fc;
   --surface-panel: #ffffff;
   --surface-muted: #f2f5fb;
+  --surface-01: #ffffff;
+  --surface-02: #f2f5fb;
   --border-color: #e3e8f2;
   --accent: #2563eb;
   --accent-soft: rgba(37, 99, 235, 0.12);
@@ -35,6 +37,8 @@
   --surface-app: #101013;
   --surface-panel: #1b1b1f;
   --surface-muted: #222228;
+  --surface-01: #1b1b1f;
+  --surface-02: #24242b;
   --border-color: rgba(255, 255, 255, 0.08);
   --accent: #8baeff;
   --accent-soft: rgba(139, 174, 255, 0.2);

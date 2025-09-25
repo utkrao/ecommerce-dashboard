@@ -1,4 +1,4 @@
-﻿import {
+import {
   Area,
   CartesianGrid,
   ComposedChart,
@@ -8,6 +8,29 @@
   XAxis,
   YAxis,
 } from "recharts"
+import { useMemo } from "react"
+import { useTheme } from "../../theme/ThemeProvider"
+
+const CHART_THEME = {
+  light: {
+    grid: "rgba(148, 163, 184, 0.22)",
+    axis: "rgba(71, 84, 103, 0.75)",
+    cursor: "rgba(148, 163, 184, 0.22)",
+    area: { from: "#bfd6ff", to: "rgba(189, 214, 255, 0)" },
+    current: "#2563eb",
+    previous: "#1f2937",
+    dotStroke: "#ffffff",
+  },
+  dark: {
+    grid: "rgba(117, 130, 158, 0.28)",
+    axis: "rgba(224, 229, 244, 0.88)",
+    cursor: "rgba(150, 174, 255, 0.22)",
+    area: { from: "rgba(125, 162, 255, 0.55)", to: "rgba(17, 24, 39, 0.05)" },
+    current: "#94b6ff",
+    previous: "#d4c6ff",
+    dotStroke: "#101828",
+  },
+}
 
 function CustomTooltip({ active, payload }) {
   if (!active || !payload?.length) return null
@@ -29,41 +52,46 @@ function CustomTooltip({ active, payload }) {
 }
 
 export function RevenueChart({ data }) {
+  const { theme } = useTheme()
+  const palette = CHART_THEME[theme] ?? CHART_THEME.light
+  const gradientId = useMemo(() => `revenue-current-${theme}`, [theme])
+
   return (
     <ResponsiveContainer width="100%" height={260}>
       <ComposedChart data={data} margin={{ top: 12, right: 8, bottom: 0, left: 0 }}>
         <defs>
-          <linearGradient id="currentArea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#bfd6ff" stopOpacity={0.55} />
-            <stop offset="95%" stopColor="#d9e7ff" stopOpacity={0.05} />
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="3%" stopColor={palette.area.from} stopOpacity={1} />
+            <stop offset="75%" stopColor={palette.area.to} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid vertical={false} stroke="rgba(148, 163, 184, 0.28)" strokeDasharray="6 8" />
+        <CartesianGrid vertical={false} stroke={palette.grid} strokeDasharray="6 8" />
         <XAxis
           dataKey="month"
           tickLine={false}
           axisLine={false}
           dy={8}
-          fontSize={12}
-          fill="rgba(71, 84, 103, 0.78)"
+          tick={{ fill: palette.axis, fontSize: 12 }}
         />
         <YAxis hide domain={[0, "dataMax + 10"]} />
-        <Tooltip cursor={{ stroke: "rgba(148, 163, 184, 0.32)", strokeWidth: 2 }} content={<CustomTooltip />} />
-        <Area type="monotone" dataKey="current" fill="url(#currentArea)" stroke="none" />
+        <Tooltip cursor={{ stroke: palette.cursor, strokeWidth: 2 }} content={<CustomTooltip />} />
+        <Area type="monotone" dataKey="current" fill={`url(#${gradientId})`} stroke="none" />
         <Line
           type="monotone"
           dataKey="current"
-          stroke="#2563eb"
+          stroke={palette.current}
           strokeWidth={3}
-          dot={{ r: 4, strokeWidth: 2, stroke: "#ffffff" }}
-          activeDot={{ r: 6 }}
+          strokeLinecap="round"
+          dot={{ r: 4, strokeWidth: 2, stroke: palette.dotStroke, fill: palette.current }}
+          activeDot={{ r: 6, strokeWidth: 0, fill: palette.current }}
         />
         <Line
           type="monotone"
           dataKey="previous"
-          stroke="#111827"
-          strokeWidth={2}
-          strokeDasharray="5 6"
+          stroke={palette.previous}
+          strokeWidth={2.4}
+          strokeDasharray="3 6"
+          strokeLinecap="round"
           dot={false}
         />
       </ComposedChart>

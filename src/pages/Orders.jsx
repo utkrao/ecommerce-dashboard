@@ -133,50 +133,98 @@ export default function OrdersPage() {
   return (
     <div className="orders">
       <header className="orders__header">
-        <div>
-          <h1>Order List</h1>
-          <p>Monitor customer orders and track their current status.</p>
-        </div>
+
+        <h1 className="orders__title">Order List</h1>
+
         {selected.size > 0 ? <span className="orders__selection">Selected {selected.size}</span> : null}
+
       </header>
 
-      <div className="orders__toolbar card">
-        <div className="orders__actions">
-          <button type="button" className="orders__primary">
+
+
+      <div className="orders__bar">
+
+        <div className="orders__bar-actions">
+
+          <button type="button" className="orders__tool" aria-label="Create order">
+
             <Plus size={16} />
-            New Order
+
           </button>
-          <button type="button" className="orders__icon">
+
+          <button type="button" className="orders__tool" aria-label="Filter orders">
+
             <Filter size={16} />
+
           </button>
-          <button type="button" className="orders__icon" onClick={() => handleSort(sortConfig.key)}>
+
+          <button
+
+            type="button"
+
+            className="orders__tool"
+
+            aria-label="Sort orders"
+
+            onClick={() => handleSort(sortConfig.key)}
+
+          >
+
             <ArrowUpDown size={16} />
+
           </button>
+
         </div>
 
+
+
         <div className="orders__filters">
+
           <label className="orders__search" htmlFor="orders-search">
+
             <Search size={16} aria-hidden="true" />
+
             <input
+
               id="orders-search"
+
               placeholder="Search orders"
+
               value={search}
+
               onChange={(event) => setSearch(event.target.value)}
+
             />
+
           </label>
+
           <select
+
             className="orders__select"
+
             value={statusFilter}
+
             onChange={(event) => setStatusFilter(event.target.value)}
+
           >
+
             {orderStatusOptions.map((option) => (
+
               <option key={option.value} value={option.value}>
+
                 {option.label}
+
               </option>
+
             ))}
+
           </select>
+
         </div>
+
       </div>
+
+
 
       <div className="orders__table card">
         <table>
