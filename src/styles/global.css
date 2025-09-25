@@ -1,0 +1,121 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --text-primary: #111827;
+  --text-secondary: #475467;
+  --text-tertiary: #98a2b3;
+  --surface-app: #f7f9fc;
+  --surface-panel: #ffffff;
+  --surface-muted: #f2f5fb;
+  --border-color: #e3e8f2;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --success: #16a34a;
+  --warning: #facc15;
+  --danger: #f43f5e;
+  --info: #38bdf8;
+  --shadow-soft: 0 24px 44px rgba(15, 23, 42, 0.06);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 999px;
+  --transition-fast: 180ms ease;
+  --transition-medium: 240ms ease;
+  --transition-slow: 340ms ease;
+  background-color: var(--surface-app);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --text-primary: #f5f6fa;
+  --text-secondary: #c4cad5;
+  --text-tertiary: #949db0;
+  --surface-app: #101013;
+  --surface-panel: #1b1b1f;
+  --surface-muted: #222228;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --accent: #8baeff;
+  --accent-soft: rgba(139, 174, 255, 0.2);
+  --shadow-soft: 0 28px 48px rgba(0, 0, 0, 0.45);
+  background-color: var(--surface-app);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-base);
+  background: var(--surface-app);
+  color: var(--text-primary);
+  min-height: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  background: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(17, 24, 39, 0.16);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(17, 24, 39, 0.3);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+

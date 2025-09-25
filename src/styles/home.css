@@ -1,0 +1,185 @@
+﻿.home {
+  padding-top: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 32px;
+  align-items: start;
+  width: 100%;
+}
+
+.home__main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.home__top-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.9fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.home__intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.home__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.home__subtitle {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.home__analytics {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.metrics-grid > * {
+  min-height: 120px;
+}
+
+.home__projections-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.insights-grid__revenue {
+  grid-column: 1 / span 8;
+}
+
+.insights-grid__location {
+  grid-column: 9 / span 4;
+}
+
+.insights-grid__sales {
+  grid-column: 9 / span 4;
+}
+
+.insights-grid__products {
+  grid-column: 1 / span 8;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table-wrapper table {
+  min-width: 100%;
+}
+
+.home__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-left: 28px;
+  border-left: 1px solid rgba(28, 28, 28, 0.1);
+  align-self: start;
+}
+
+.home__aside > * {
+  flex: 0 0 auto;
+}
+
+[data-theme='dark'] .home__aside {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 1320px) {
+  .home {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .home__top-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .home__projections-card {
+    min-height: 280px;
+  }
+
+  .insights-grid__revenue,
+  .insights-grid__location,
+  .insights-grid__sales,
+  .insights-grid__products {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 1080px) {
+  .home {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .home__aside {
+    flex-direction: row;
+    gap: 16px;
+    border-left: none;
+    padding-left: 0;
+    overflow-x: auto;
+  }
+
+  .home__aside > * {
+    flex: 0 0 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home {
+    padding-top: 10px;
+  }
+
+  .home__aside {
+    flex-direction: column;
+    gap: 16px;
+    overflow: visible;
+  }
+
+  .home__aside > * {
+    flex: 1 1 auto;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .insights-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .insights-grid__revenue,
+  .insights-grid__location,
+  .insights-grid__sales,
+  .insights-grid__products {
+    grid-column: span 1;
+  }
+}
