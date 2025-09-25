@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts"
 import { useTheme } from "../../theme/ThemeProvider"
 
@@ -9,10 +10,10 @@ const DONUT_COLORS = {
     'E-mail': "#BEE4FF",
   },
   dark: {
-    Direct: "#0f172a",
-    Affiliate: "#4ddbb7",
-    Sponsored: "#96a6ff",
-    'E-mail': "#7dd3fc",
+    Direct: "#111111",
+    Affiliate: "#BDECC6",
+    Sponsored: "#A3AEFF",
+    'E-mail': "#A8DEFF",
   },
 }
 
@@ -39,9 +40,11 @@ export function SalesDonut({ data }) {
 
   const total = chartData.reduce((sum, item) => sum + item.value, 0)
   const primary = chartData[0]
-  const primaryValue = primary?.value ?? 0
-  const percentage = total > 0 && primary ? (primaryValue / total) * 100 : 0
-  const formattedPercentage = total > 0 && primary ? percentage.toFixed(1).replace(/\.0$/, '') : '--'
+  const [hovered, setHovered] = useState(null)
+
+  const focusName = hovered ?? primary?.name
+  const focusEntry = focusName ? chartData.find((entry) => entry.name === focusName) : null
+  const focusPercent = focusEntry && total > 0 ? ((focusEntry.value / total) * 100).toFixed(1).replace(/\.0$/, '') : '--'
 
   const ringStroke = theme === 'dark' ? '#0b1324' : '#f5f8ff'
 
@@ -64,26 +67,42 @@ export function SalesDonut({ data }) {
             cornerRadius={18}
             stroke={ringStroke}
             strokeWidth={6}
+            onMouseLeave={() => setHovered(null)}
+            onMouseEnter={(_, index) => setHovered(chartData[index]?.name ?? null)}
           >
             {chartData.map((entry) => (
-              <Cell key={entry.name} fill={entry.color} stroke={ringStroke} strokeWidth={6} />
+              <Cell
+                key={entry.name}
+                fill={entry.color}
+                stroke={ringStroke}
+                strokeWidth={6}
+                opacity={!hovered || hovered === entry.name ? 1 : 0.35}
+              />
             ))}
           </Pie>
         </PieChart>
       </ResponsiveContainer>
-      {primary ? (
-        <div className="donut-chart__callout">{formattedPercentage}%</div>
+      {focusEntry ? (
+        <div className="donut-chart__callout">{focusPercent}%</div>
       ) : null}
       <ul className="donut-chart__legend">
-        {chartData.map((item) => (
-          <li key={item.name}>
-            <div className="donut-chart__legend-label">
-              <span className="donut-chart__legend-dot" style={{ background: item.color }} />
-              <span>{item.name}</span>
-            </div>
-            <span className="donut-chart__legend-value">${item.value.toFixed(2)}</span>
-          </li>
-        ))}
+        {chartData.map((item) => {
+          const isHovered = hovered === item.name
+          return (
+            <li
+              key={item.name}
+              className={isHovered ? "is-hovered" : ""}
+              onMouseEnter={() => setHovered(item.name)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <div className="donut-chart__legend-label">
+                <span className="donut-chart__legend-dot" style={{ background: item.color }} />
+                <span>{item.name}</span>
+              </div>
+              <span className="donut-chart__legend-value">${item.value.toFixed(2)}</span>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

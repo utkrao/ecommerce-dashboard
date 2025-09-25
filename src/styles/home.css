@@ -183,3 +183,37 @@
     grid-column: span 1;
   }
 }
+
+@media (max-width: 900px) {
+  .home__main {
+    gap: 20px;
+  }
+
+  .home__analytics {
+    gap: 20px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home {
+    padding-top: 8px;
+  }
+
+  .home__title {
+    font-size: 24px;
+  }
+
+  .home__subtitle {
+    font-size: 13px;
+  }
+
+  .home__aside > * {
+    min-width: auto;
+  }
+}
+

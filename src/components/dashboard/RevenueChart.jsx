@@ -10,6 +10,7 @@ import {
 } from "recharts"
 import { useMemo } from "react"
 import { useTheme } from "../../theme/ThemeProvider"
+import { useMediaQuery } from "../../hooks/useMediaQuery"
 
 const CHART_THEME = {
   light: {
@@ -55,10 +56,14 @@ export function RevenueChart({ data }) {
   const { theme } = useTheme()
   const palette = CHART_THEME[theme] ?? CHART_THEME.light
   const gradientId = useMemo(() => `revenue-current-${theme}`, [theme])
+  const isCompact = useMediaQuery('(max-width: 900px)')
+  const chartHeight = isCompact ? 210 : 260
+  const axisTick = { fill: palette.axis, fontSize: isCompact ? 11 : 12 }
+  const xInterval = isCompact ? 1 : 0
 
   return (
-    <ResponsiveContainer width="100%" height={260}>
-      <ComposedChart data={data} margin={{ top: 12, right: 8, bottom: 0, left: 0 }}>
+    <ResponsiveContainer width="100%" height={chartHeight}>
+      <ComposedChart data={data} margin={{ top: 12, right: 8, bottom: isCompact ? 4 : 0, left: isCompact ? -4 : 0 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="3%" stopColor={palette.area.from} stopOpacity={1} />
@@ -71,7 +76,8 @@ export function RevenueChart({ data }) {
           tickLine={false}
           axisLine={false}
           dy={8}
-          tick={{ fill: palette.axis, fontSize: 12 }}
+          interval={xInterval}
+          tick={axisTick}
         />
         <YAxis hide domain={[0, "dataMax + 10"]} />
         <Tooltip cursor={{ stroke: palette.cursor, strokeWidth: 2 }} content={<CustomTooltip />} />

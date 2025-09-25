@@ -13,6 +13,7 @@ import {
 import '../styles/orders.css'
 import { orders as ordersData, orderStatusOptions } from '../data/orders'
 import { StatusBadge } from '../components/common/StatusBadge'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 
 const pageSize = 6
 
@@ -130,6 +131,8 @@ export default function OrdersPage() {
   const startIndex = filteredOrders.length === 0 ? 0 : (page - 1) * pageSize + 1
   const endIndex = Math.min(page * pageSize, filteredOrders.length)
 
+  const isCompact = useMediaQuery('(max-width: 1024px)')
+
   return (
     <div className="orders">
       <header className="orders__header">
@@ -226,86 +229,154 @@ export default function OrdersPage() {
 
 
 
-      <div className="orders__table card">
-        <table>
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  onChange={handleToggleAll}
-                  aria-label="Select all"
-                />
-              </th>
-              {tableColumns.map((column) => (
-                <th key={column.key}>
-                  <button type="button" onClick={() => handleSort(column.key)}>
-                    {column.label}
-                    {renderSortIcon(column.key)}
-                  </button>
-                </th>
-              ))}
-              <th aria-label="Actions" />
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedOrders.length === 0 ? (
-              <tr>
-                <td colSpan={tableColumns.length + 2} className="orders__empty">
-                  No orders match the current filters.
-                </td>
-              </tr>
-            ) : (
-              paginatedOrders.map((order) => {
-                const isChecked = selected.has(order.orderId)
-                return (
-                  <Motion.tr
-                    key={order.orderId}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-                    className={isChecked ? 'is-selected' : ''}
-                  >
-                    <td>
+      {isCompact ? (
+        <div className="orders__cards">
+          {paginatedOrders.length === 0 ? (
+            <div className="orders__empty-card">
+              <p>No orders match the current filters.</p>
+            </div>
+          ) : (
+            paginatedOrders.map((order) => {
+              const isChecked = selected.has(order.orderId)
+              return (
+                <Motion.article
+                  key={order.orderId}
+                  className={`orders-card ${isChecked ? 'is-selected' : ''}`}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+                >
+                  <header className="orders-card__header">
+                    <label className="orders-card__checkbox">
                       <input
                         type="checkbox"
                         checked={isChecked}
                         onChange={() => handleToggleRow(order.orderId)}
                         aria-label={`Select ${order.orderId}`}
                       />
-                    </td>
-                    <td className="orders__cell--id">
                       <span>{order.orderId}</span>
-                    </td>
-                    <td className="orders__cell--user">
+                    </label>
+                    <StatusBadge status={order.status} />
+                  </header>
+
+                  <div className="orders-card__body">
+                    <div className="orders-card__user">
                       <img src={order.avatar} alt="" aria-hidden="true" />
                       <div>
                         <span className="orders__user-name">{order.user}</span>
                         <span className="orders__user-meta">{order.project}</span>
                       </div>
-                    </td>
-                    <td>{order.project}</td>
-                    <td>{order.address}</td>
-                    <td className="orders__cell--date">
-                      <Calendar size={14} aria-hidden="true" />
-                      <span>{order.dateLabel}</span>
-                    </td>
-                    <td>
-                      <StatusBadge status={order.status} />
-                    </td>
-                    <td className="orders__cell--actions">
-                      <button type="button" className="orders__icon">
-                        <MoreHorizontal size={16} />
-                      </button>
-                    </td>
-                  </Motion.tr>
-                )
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+                    </div>
+
+                    <div className="orders-card__details">
+                      <div>
+                        <span className="orders-card__label">Project</span>
+                        <span className="orders-card__value">{order.project}</span>
+                      </div>
+                      <div>
+                        <span className="orders-card__label">Address</span>
+                        <span className="orders-card__value">{order.address}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <footer className="orders-card__footer">
+                    <span className="orders-card__date">
+                      <Calendar size={15} aria-hidden="true" />
+                      {order.dateLabel}
+                    </span>
+                    <button type="button" className="orders__icon">
+                      <MoreHorizontal size={16} />
+                    </button>
+                  </footer>
+                </Motion.article>
+              )
+            })
+          )}
+        </div>
+      ) : (
+        <div className="orders__table card">
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    onChange={handleToggleAll}
+                    aria-label="Select all"
+                  />
+                </th>
+                {tableColumns.map((column) => (
+                  <th key={column.key}>
+                    <button type="button" onClick={() => handleSort(column.key)}>
+                      {column.label}
+                      {renderSortIcon(column.key)}
+                    </button>
+                  </th>
+                ))}
+                <th aria-label="Actions" />
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedOrders.length === 0 ? (
+                <tr>
+                  <td colSpan={tableColumns.length + 2} className="orders__empty">
+                    No orders match the current filters.
+                  </td>
+                </tr>
+              ) : (
+                paginatedOrders.map((order) => {
+                  const isChecked = selected.has(order.orderId)
+                  return (
+                    <Motion.tr
+                      key={order.orderId}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                      className={isChecked ? 'is-selected' : ''}
+                    >
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleToggleRow(order.orderId)}
+                          aria-label={`Select ${order.orderId}`}
+                        />
+                      </td>
+                      <td className="orders__cell--id">
+                        <span>{order.orderId}</span>
+                      </td>
+                      <td className="orders__cell--user">
+                        <img src={order.avatar} alt="" aria-hidden="true" />
+                        <div>
+                          <span className="orders__user-name">{order.user}</span>
+                          <span className="orders__user-meta">{order.project}</span>
+                        </div>
+                      </td>
+                      <td>{order.project}</td>
+                      <td>{order.address}</td>
+                      <td className="orders__cell--date">
+                        <Calendar size={14} aria-hidden="true" />
+                        <span>{order.dateLabel}</span>
+                      </td>
+                      <td>
+                        <StatusBadge status={order.status} />
+                      </td>
+                      <td className="orders__cell--actions">
+                        <button type="button" className="orders__icon">
+                          <MoreHorizontal size={16} />
+                        </button>
+                      </td>
+                    </Motion.tr>
+                  )
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
 
       <footer className="orders__footer">
         <span>
